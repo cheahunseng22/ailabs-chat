@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>AI Chat • Streaming Text • Stop Generation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+            <!-- Mobile Menu Toggle Button -->
+
+<button class="mobile-menu-toggle" id="mobileMenuToggle">
+    ☰
+</button>
+<div class="app-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i data-lucide="bot"></i>
+                </div>
+                <span class="logo-text">AI<span>Labs</span></span>
+            </div>
+
+            <div class="new-chat-btn">
+                <button id="clearChatBtn">
+                    <i data-lucide="plus"></i>
+                    <span>New Chat</span>
+                </button>
+            </div>
+
+            <div class="chat-history-section">
+                <div class="history-header">
+                    <span>Recent Chats</span>
+                    <button id="toggleHistoryBtn" class="toggle-history">
+                        <i data-lucide="chevron-down"></i>
+                    </button>
+                </div>
+                <div class="chat-history-list" id="chatHistoryList"></div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="status-badge">
+                    <span class="pulse"></span>
+                    <span>Streaming Ready</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CHAT AREA -->
+        <main class="chat-main">
+            <div class="chat-header">
+                <div class="ai-badge">
+                    <div class="ai-icon">
+                        <i data-lucide="cpu"></i>
+                    </div>
+                    <div class="ai-info">
+                        <h2>Nova Assistant</h2>
+                        <p>Streaming text • typewriter response • Stop anytime</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <span class="stream-indicator">
+                        <i data-lucide="zap"></i> Streaming
+                    </span>
+                </div>
+            </div>
+
+            <div class="messages-container" id="messagesContainer">
+                <div class="welcome-message">
+                    <div class="welcome-icon">
+                        <i data-lucide="message-circle"></i>
+                    </div>
+                    <h3>Streaming AI Chat</h3>
+                    <p>Ask me anything — watch text appear letter by letter.<br>Click <strong>Stop Generating</strong> to interrupt mid-response!</p>
+                    <div class="example-prompts">
+                        <button class="example-btn" data-prompt="Tell me a short story">
+                            <i data-lucide="book-open"></i> Story
+                        </button>
+                        <button class="example-btn" data-prompt="Explain quantum computing simply">
+                            <i data-lucide="atom"></i> Quantum
+                        </button>
+                        <button class="example-btn" data-prompt="Write a short poem about AI">
+                            <i data-lucide="feather"></i> Poem
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <textarea
+                        id="userInput"
+                        placeholder="Type your message... Press Enter to send"
+                        rows="1"
+                    ></textarea>
+                    <button id="sendBtn" class="send-btn">
+                        <i data-lucide="send"></i>
+                    </button>
+                    <button id="stopBtn" class="stop-btn" style="display: none;">
+                        <i data-lucide="square"></i> Stop Generating
+                    </button>
+                </div>
+                <div class="input-note">
+                    <span>↵ Enter to send</span>
+                    <span>Click Stop to interrupt</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="js/script.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
