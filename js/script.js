@@ -112,6 +112,8 @@ window.addEventListener('beforeunload', () => this.saveCurrentChat());
     stopGeneration() {
         if (!this.isStreaming) return;
 
+        stopAIResponse();
+
         if (this.streamingTimeout) {
             clearTimeout(this.streamingTimeout);
             this.streamingTimeout = null;
