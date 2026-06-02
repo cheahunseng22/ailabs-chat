@@ -401,21 +401,21 @@ localStorage.setItem('ai_current_chat_id', this.currentChatId); // ✅ add this
         try {
             bubbleElement.innerHTML = '';
             let fullText = '';
-            let renderScheduled = false;
+            
+
+let lastRender = 0;
 
 await fetchAIResponse(message, this.getCurrentMessages(), (chunk) => {
     if (this.isStopped) return;
+
     fullText += chunk;
-    if (!renderScheduled) {
-        renderScheduled = true;
-        requestAnimationFrame(() => {
-            if (!this.isStopped) {
-                bubbleElement.innerHTML = marked.parse(fullText);
-                bubbleElement.classList.add('streaming-cursor');
-                this.scrollToBottom();
-            }
-            renderScheduled = false;
-        });
+
+    const now = Date.now();
+
+    // update screen every 50ms
+    if (now - lastRender > 50) {
+        bubbleElement.textContent = fullText;
+        lastRender = now;
     }
 });
 
