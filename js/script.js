@@ -171,7 +171,7 @@ restoreOrNew() {
 
     scrollBottom(force = false) {
         const now = Date.now();
-        if (force || now - this.lastScroll > 100) {
+       if (force || now - this.lastScroll > 200) {
             this.lastScroll = now;
             requestAnimationFrame(() => this.msgs.scrollTop = this.msgs.scrollHeight);
         }
@@ -200,20 +200,31 @@ restoreOrNew() {
 
         let full = '', lastRender = 0;
         try {
-            await fetchAIResponse(text, history, chunk => {
-                if (this.stopped) return;
-                full += chunk;
-                const now = Date.now();
-             
-if (now - lastRender > 30) { 
-    this.bubble.innerHTML = marked.parse(full); 
-    lastRender = now; 
-    this.scrollBottom(); 
-}
-            });
-           if (!this.stopped) { 
-    this.bubble.innerHTML = marked.parse(full); 
-    this.save(); 
+await fetchAIResponse(text, history, chunk => {
+    if (this.stopped) return;
+
+    full += chunk;
+    const now = Date.now();
+
+    // ✅ Only update UI every ~80ms
+    if (now - lastRender > 80) {
+
+        // ✅ FAST: append only new chunk (NOT full re-render)
+        this.bubble.insertAdjacentHTML(
+            "beforeend",
+            marked.parse(chunk)
+        );
+
+        lastRender = now;
+
+        // ✅ reduce scroll spam
+        this.scrollBottom();
+    }
+});
+if (!this.stopped) {
+    // final full render (only once at end)
+    this.bubble.innerHTML = marked.parse(full);
+    this.save();
 }
         } catch(e) {
             this.bubble.innerHTML = '<span style="color:#f87171">Failed to reach API. Try again.</span>';
