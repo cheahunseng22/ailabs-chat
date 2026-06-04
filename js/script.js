@@ -59,24 +59,43 @@ class Chat {
     }
 
     // ── Chat CRUD ────────────────────────────────────────────────
-    newChat() {
-        if (this.streaming) this.stopStream();
-        if (this.chatId) this.save();
-        this.chatId = Date.now().toString();
-        store.set('ai_current_chat_id', this.chatId);
-        this.msgs.innerHTML = '';
-        this.showWelcome();
-        this.renderHistory();
-        this.input.focus();
-    }
+newChat() {
+    if (this.streaming) this.stopStream();
+    if (this.chatId) this.save();
+    this.chatId = Date.now().toString();
+    store.set('ai_current_chat_id', this.chatId);
+    sessionStorage.setItem('ai_session_active', 'true');
+    this.msgs.innerHTML = '';
+    this.showWelcome();
+    this.renderHistory();
+    this.input.focus();
+}
 
-    restoreOrNew() {
-        const id = store.get('ai_current_chat_id', null);
-        const chat = id && this.chats.find(c => c.id === id);
-        if (chat) { this.chatId = chat.id; this.msgs.innerHTML=''; chat.messages.forEach(m => this.render(m.text, m.sender)); this.scrollBottom(true); }
-        else this.newChat();
-        this.renderHistory();
+restoreOrNew() {
+    // Check if this is a fresh session (browser just opened)
+    const isFreshSession = !sessionStorage.getItem('ai_session_active');
+    
+    if (isFreshSession) {
+        // First visit this session — start with new chat
+        sessionStorage.setItem('ai_session_active', 'true');
+        this.newChat();
+        return;
     }
+    
+    // Normal page refresh during same session — restore current chat
+    const id = store.get('ai_current_chat_id', null);
+    const chat = id && this.chats.find(c => c.id === id);
+    if (chat) { 
+        this.chatId = chat.id; 
+        this.msgs.innerHTML = ''; 
+        chat.messages.forEach(m => this.render(m.text, m.sender)); 
+        this.scrollBottom(true);
+    } 
+    else { 
+        this.newChat(); 
+    }
+    this.renderHistory();
+}
 
     loadChat(id) {
         if (this.streaming) this.stopStream();

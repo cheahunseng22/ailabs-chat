@@ -1,4 +1,4 @@
-const API_BASE = "https://guam-worthy-describe-anne.trycloudflare.com";
+const API_BASE = "https://cheaper-details-how-nominated.trycloudflare.com";
 const API_KEY = "sk_7X3kL9mN2pQ5rT8vW1yZ4aB6cD0eF3gH5jK7lM9nP1qR3tV5wX7yZ";
 
 let currentController = null;
