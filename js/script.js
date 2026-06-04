@@ -205,23 +205,30 @@ restoreOrNew() {
                 full += chunk;
                 const now = Date.now();
              
-if (now - lastRender > 30) { 
-    this.bubble.innerHTML = marked.parse(full); 
-    lastRender = now; 
-    this.scrollBottom(); 
+if (now - lastRender > 1) {
+    const codeBlocks = (full.match(/```/g) || []).length;
+    const safeToRender = codeBlocks % 2 === 0;
+    if (safeToRender) {
+        this.bubble.innerHTML = marked.parse(full);
+    } else {
+        this.bubble.textContent = full;
+    }
+    lastRender = now;
+    this.scrollBottom();
 }
             });
            if (!this.stopped) { 
     this.bubble.innerHTML = marked.parse(full); 
     this.save(); 
 }
-        } catch(e) {
+} catch(e) {
             this.bubble.innerHTML = '<span style="color:#f87171">Failed to reach API. Try again.</span>';
+        } finally {
+            this.streaming = false;
+            this.stop.style.display='none'; this.send.style.display='flex';
+            this.input.disabled=false; this.send.disabled=false;
+            this.input.focus();
         }
-        this.streaming = false;
-        this.stop.style.display='none'; this.send.style.display='flex';
-        this.input.disabled=false; this.send.disabled=false;
-        this.input.focus();
     }
 
     stopStream() {

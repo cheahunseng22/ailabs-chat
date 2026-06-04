@@ -1,4 +1,4 @@
-const API_BASE = "https://forums-lcd-writer-decor.trycloudflare.com";
+const API_BASE = "https://ours-exposed-note-teacher.trycloudflare.com";
 const API_KEY = "sk_7X3kL9mN2pQ5rT8vW1yZ4aB6cD0eF3gH5jK7lM9nP1qR3tV5wX7yZ";
 
 let currentController = null;
@@ -28,11 +28,17 @@ export async function fetchAIResponse(message, history, onChunk) {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
 
-        while (true) {
+while (true) {
             const { done, value } = await reader.read();
             if (done) break;
             const chunk = decoder.decode(value, { stream: true });
-            if (chunk) onChunk(chunk);
+            if (chunk) {
+                for (const char of chunk) {
+                    if (currentController === null) break;
+                    onChunk(char);
+                    await new Promise(r => setTimeout(r, 8));
+                }
+            }
         }
     } catch (err) {
         if (err.name === 'AbortError') return; // silently stop
